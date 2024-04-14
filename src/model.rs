@@ -49,7 +49,7 @@ impl<B: Backend> Model<B> {
             .collect();
 
         Self {
-            w: Param::from(Tensor::from_floats(
+            w: Param::from_tensor(Tensor::from_floats(
                 Data::new(initial_params, Shape { dims: [17] }),
                 &B::Device::default(),
             )),
@@ -243,7 +243,7 @@ impl<B: Backend> FSRS<B> {
 pub(crate) fn parameters_to_model<B: Backend>(parameters: &Parameters) -> Model<B> {
     let config = ModelConfig::default();
     let mut model = Model::new(config);
-    model.w = Param::from(Tensor::from_floats(
+    model.w = Param::from_tensor(Tensor::from_floats(
         Data::new(clip_parameters(parameters), Shape { dims: [17] }),
         &B::Device::default(),
     ));

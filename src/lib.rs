@@ -1,4 +1,5 @@
 #![allow(clippy::single_range_in_vec_init)]
+#![feature(associated_type_bounds)]
 
 mod batch_shuffle;
 #[cfg(test)]

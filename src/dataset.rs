@@ -50,6 +50,7 @@ impl FSRSItem {
     }
 }
 
+#[derive(Debug, Clone)]
 pub(crate) struct FSRSBatcher<B: Backend> {
     device: B::Device,
 }

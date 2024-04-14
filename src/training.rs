@@ -189,7 +189,7 @@ pub fn calculate_average_recall(items: &[FSRSItem]) -> f32 {
     total_recall as f32 / total_reviews as f32
 }
 
-impl<B: Backend> FSRS<B> {
+impl<B: Backend<FloatTensorPrimitive<2>: Send + Sync>> FSRS<B> {
     /// Calculate appropriate parameters for the provided review history.
     pub fn compute_parameters(
         &self,
@@ -300,7 +300,7 @@ impl<B: Backend> FSRS<B> {
     }
 }
 
-fn train<B: AutodiffBackend>(
+fn train<B: AutodiffBackend + Backend<FloatTensorPrimitive<2>: Send + Sync>>(
     train_set: Vec<FSRSItem>,
     test_set: Vec<FSRSItem>,
     config: &TrainingConfig,
@@ -358,7 +358,7 @@ fn train<B: AutodiffBackend>(
             }
             let grads = GradientsParams::from_grads(gradients, &model);
             model = optim.step(lr, model, grads);
-            model.w = Param::from(weight_clipper(model.w.val()));
+            model.w = Param::from_tensor(weight_clipper(model.w.val()));
             // info!("epoch: {:?} iteration: {:?} lr: {:?}", epoch, iteration, lr);
             renderer.render_train(TrainingProgress {
                 progress,
